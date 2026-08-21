@@ -354,7 +354,7 @@ export default function WebsiteSettingsPage() {
               </CardHeader>
               <CardContent className="space-y-4 max-w-lg pt-6">
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Short Description</Label>
+                  <Label className="text-xs font-medium">Short description of your clinic</Label>
                   <Textarea
                     className="bg-muted/30 border-border/40 min-h-[60px]"
                     placeholder="A modern dental clinic dedicated to your smile..."
@@ -363,7 +363,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Title</Label>
+                  <Label className="text-xs font-medium">Main headline</Label>
                   <Input
                     className="bg-muted/30 border-border/40"
                     placeholder="Your Smile, Our Priority"
@@ -372,7 +372,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Subtitle</Label>
+                  <Label className="text-xs font-medium">Sub-headline</Label>
                   <Input
                     className="bg-muted/30 border-border/40"
                     placeholder="Professional dental care for the whole family"
@@ -381,7 +381,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Background Image</Label>
+                  <Label className="text-xs font-medium">Background photo</Label>
                   <div className="flex items-center gap-4">
                     <div className="h-20 w-36 rounded-lg bg-muted/50 border border-border/40 flex items-center justify-center overflow-hidden">
                       {get("hero_image_url") ? (
@@ -401,7 +401,7 @@ export default function WebsiteSettingsPage() {
                   </div>
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Changes"}
+                  {updateClinic.isPending ? "Saving..." : "Save changes"}
                 </Button>
               </CardContent>
             </Card>
@@ -461,7 +461,7 @@ export default function WebsiteSettingsPage() {
                 )}
 
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Gallery"}
+                  {updateClinic.isPending ? "Saving..." : "Save gallery"}
                 </Button>
               </CardContent>
             </Card>
@@ -494,7 +494,7 @@ export default function WebsiteSettingsPage() {
                   </div>
                 ))}
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20 mt-4" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Hours"}
+                  {updateClinic.isPending ? "Saving..." : "Save hours"}
                 </Button>
               </CardContent>
             </Card>
@@ -536,7 +536,7 @@ export default function WebsiteSettingsPage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                    {updateClinic.isPending ? "Saving..." : "Save Colors"}
+                    {updateClinic.isPending ? "Saving..." : "Save colours"}
                   </Button>
                   <Button
                     variant="outline"
@@ -579,7 +579,7 @@ export default function WebsiteSettingsPage() {
                   <Input className="bg-muted/30 border-border/40" placeholder="https://g.page/yourclinic/review" value={get("google_review_url")} onChange={(e) => set("google_review_url", e.target.value)} />
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Social Links"}
+                  {updateClinic.isPending ? "Saving..." : "Save contact details"}
                 </Button>
               </CardContent>
             </Card>
@@ -614,7 +614,7 @@ export default function WebsiteSettingsPage() {
                   {certs.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No certifications added yet</p>}
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Certifications"}
+                  {updateClinic.isPending ? "Saving..." : "Save credentials"}
                 </Button>
               </CardContent>
             </Card>
@@ -647,7 +647,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Booking Settings"}
+                  {updateClinic.isPending ? "Saving..." : "Save booking messages"}
                 </Button>
               </CardContent>
             </Card>
@@ -667,20 +667,20 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Hero</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow badge</Label>
+                    <Label className="text-xs font-medium">Small badge above the headline</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Asaba's Premier Dental Clinic" value={get("hero_eyebrow")} onChange={(e) => set("hero_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Highlighted second line</Label>
+                    <Label className="text-xs font-medium">Second line (shown in your brand colour)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Personal Touch." value={get("hero_highlight")} onChange={(e) => set("hero_highlight", e.target.value)} />
                     <p className="text-[10px] text-muted-foreground">Shown under the hero title in your primary colour.</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Hero badge card title</Label>
+                    <Label className="text-xs font-medium">Small card on the photo — title</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Same-day appointments" value={get("hero_badge_title")} onChange={(e) => set("hero_badge_title", e.target.value)} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Hero badge card subtitle</Label>
+                    <Label className="text-xs font-medium">Small card on the photo — subtitle</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Call or book online and we'll fit you in." value={get("hero_badge_subtitle")} onChange={(e) => set("hero_badge_subtitle", e.target.value)} />
                   </div>
                 </div>
@@ -688,7 +688,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">About section</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="About us" value={get("about_eyebrow")} onChange={(e) => set("about_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -716,7 +716,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Services &amp; booking band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Our services" value={get("booking_eyebrow")} onChange={(e) => set("booking_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -733,7 +733,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Reviews band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Patient stories" value={get("reviews_eyebrow")} onChange={(e) => set("reviews_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -745,7 +745,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Visit band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Location" value={get("visit_eyebrow")} onChange={(e) => set("visit_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -759,7 +759,7 @@ export default function WebsiteSettingsPage() {
                 </div>
 
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Page Content"}
+                  {updateClinic.isPending ? "Saving..." : "Save page wording"}
                 </Button>
               </CardContent>
             </Card>
