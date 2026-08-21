@@ -72,6 +72,13 @@ export default function WebsiteSettingsPage() {
   const [pricingItems, setPricingItems] = useState<PricingItem[]>([]);
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
 
+  // Section navigation + guided tour
+  const [tab, setTab] = useState<string>(websiteGuideSections[0].id);
+  const [tourOpen, setTourOpen] = useState(false);
+  const activeGuide = getGuideSection(tab);
+
+
+
   // Sync from server
   useEffect(() => {
     if (settings) {
