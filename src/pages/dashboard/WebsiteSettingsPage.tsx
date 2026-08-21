@@ -743,9 +743,12 @@ export default function WebsiteSettingsPage() {
               </CardContent>
             </Card>
           </TabsContent>
+          </div>
         </Tabs>
 
+        <SectionTour section={activeGuide} open={tourOpen} onOpenChange={setTourOpen} />
       </motion.div>
+
     </div>
   );
 }
