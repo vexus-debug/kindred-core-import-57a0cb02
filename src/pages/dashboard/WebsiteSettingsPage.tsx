@@ -218,22 +218,51 @@ export default function WebsiteSettingsPage() {
       </Card>
 
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <Tabs defaultValue="templates">
-          <TabsList className="bg-muted/50 backdrop-blur-sm flex-wrap h-auto gap-1">
-            <TabsTrigger value="templates"><LayoutTemplate className="mr-1.5 h-3.5 w-3.5" />Templates</TabsTrigger>
-            <TabsTrigger value="identity"><Globe className="mr-1.5 h-3.5 w-3.5" />Identity & Hero</TabsTrigger>
-            <TabsTrigger value="pagecontent"><Megaphone className="mr-1.5 h-3.5 w-3.5" />Page Sections</TabsTrigger>
-
-            <TabsTrigger value="gallery"><Camera className="mr-1.5 h-3.5 w-3.5" />Gallery</TabsTrigger>
-            <TabsTrigger value="hours"><Clock className="mr-1.5 h-3.5 w-3.5" />Hours</TabsTrigger>
-            <TabsTrigger value="appearance"><Palette className="mr-1.5 h-3.5 w-3.5" />Appearance</TabsTrigger>
-            <TabsTrigger value="social"><Share2 className="mr-1.5 h-3.5 w-3.5" />Social & Contact</TabsTrigger>
-            <TabsTrigger value="trust"><Shield className="mr-1.5 h-3.5 w-3.5" />Trust & Certs</TabsTrigger>
-            <TabsTrigger value="booking"><MessageSquare className="mr-1.5 h-3.5 w-3.5" />Booking</TabsTrigger>
+        <Tabs value={tab} onValueChange={setTab} className="grid items-start gap-6 lg:grid-cols-[250px_1fr]">
+          <TabsList className="flex h-auto w-full flex-row gap-1 overflow-x-auto rounded-xl bg-muted/40 p-2 lg:flex-col lg:overflow-visible">
+            {websiteGuideSections.map((s) => {
+              const Icon = SECTION_ICONS[s.id] ?? Globe;
+              return (
+                <TabsTrigger
+                  key={s.id}
+                  value={s.id}
+                  className="w-full shrink-0 justify-start gap-2 rounded-lg px-3 py-2 text-left lg:shrink data-[state=active]:bg-card data-[state=active]:shadow-sm"
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium leading-tight">{s.label}</span>
+                    <span className="hidden text-[11px] font-normal leading-tight text-muted-foreground lg:block">
+                      {s.navHint}
+                    </span>
+                  </span>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
+
+          <div className="min-w-0 space-y-4">
+            {/* What am I editing? */}
+            <Card className="glass-card border-secondary/20">
+              <CardContent className="flex flex-wrap items-start justify-between gap-3 p-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{activeGuide.title}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{activeGuide.blurb}</p>
+                  <p className="mt-2 flex items-start gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <span>
+                      <span className="font-medium text-foreground">Where it appears:</span> {activeGuide.appears}
+                    </span>
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" className="shrink-0" onClick={() => setTourOpen(true)}>
+                  <HelpCircle className="mr-2 h-3.5 w-3.5" /> Show me how
+                </Button>
+              </CardContent>
+            </Card>
 
           {/* Templates */}
           <TabsContent value="templates" className="mt-4">
+
             <Card className="glass-card">
               <CardHeader className="border-b border-border/30">
                 <CardTitle className="text-base">Website Templates</CardTitle>
