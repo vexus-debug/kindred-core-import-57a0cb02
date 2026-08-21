@@ -13,6 +13,20 @@ import {
   BarChart3, Sparkle, UserRound, Quote, Receipt, HelpCircle, MapPin, Megaphone,
 } from "lucide-react";
 import { websiteTemplates, defaultTemplateId, getTemplate } from "@/config/websiteTemplates";
+import { websiteGuideSections, getGuideSection } from "@/config/websiteSettingsGuide";
+import { SectionTour } from "@/components/dashboard/website/SectionTour";
+
+const SECTION_ICONS: Record<string, typeof Globe> = {
+  templates: LayoutTemplate,
+  identity: Globe,
+  pagecontent: Megaphone,
+  gallery: Camera,
+  hours: Clock,
+  appearance: Palette,
+  social: Share2,
+  trust: Shield,
+  booking: MessageSquare,
+};
 
 import {
   useClinicSettings, useUpdateClinicSettings,
