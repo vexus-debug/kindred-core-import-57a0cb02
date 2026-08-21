@@ -13,6 +13,20 @@ import {
   BarChart3, Sparkle, UserRound, Quote, Receipt, HelpCircle, MapPin, Megaphone,
 } from "lucide-react";
 import { websiteTemplates, defaultTemplateId, getTemplate } from "@/config/websiteTemplates";
+import { websiteGuideSections, getGuideSection } from "@/config/websiteSettingsGuide";
+import { SectionTour } from "@/components/dashboard/website/SectionTour";
+
+const SECTION_ICONS: Record<string, typeof Globe> = {
+  templates: LayoutTemplate,
+  identity: Globe,
+  pagecontent: Megaphone,
+  gallery: Camera,
+  hours: Clock,
+  appearance: Palette,
+  social: Share2,
+  trust: Shield,
+  booking: MessageSquare,
+};
 
 import {
   useClinicSettings, useUpdateClinicSettings,
@@ -57,6 +71,13 @@ export default function WebsiteSettingsPage() {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [pricingItems, setPricingItems] = useState<PricingItem[]>([]);
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
+
+  // Section navigation + guided tour
+  const [tab, setTab] = useState<string>(websiteGuideSections[0].id);
+  const [tourOpen, setTourOpen] = useState(false);
+  const activeGuide = getGuideSection(tab);
+
+
 
   // Sync from server
   useEffect(() => {
@@ -218,22 +239,51 @@ export default function WebsiteSettingsPage() {
       </Card>
 
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <Tabs defaultValue="templates">
-          <TabsList className="bg-muted/50 backdrop-blur-sm flex-wrap h-auto gap-1">
-            <TabsTrigger value="templates"><LayoutTemplate className="mr-1.5 h-3.5 w-3.5" />Templates</TabsTrigger>
-            <TabsTrigger value="identity"><Globe className="mr-1.5 h-3.5 w-3.5" />Identity & Hero</TabsTrigger>
-            <TabsTrigger value="pagecontent"><Megaphone className="mr-1.5 h-3.5 w-3.5" />Page Sections</TabsTrigger>
-
-            <TabsTrigger value="gallery"><Camera className="mr-1.5 h-3.5 w-3.5" />Gallery</TabsTrigger>
-            <TabsTrigger value="hours"><Clock className="mr-1.5 h-3.5 w-3.5" />Hours</TabsTrigger>
-            <TabsTrigger value="appearance"><Palette className="mr-1.5 h-3.5 w-3.5" />Appearance</TabsTrigger>
-            <TabsTrigger value="social"><Share2 className="mr-1.5 h-3.5 w-3.5" />Social & Contact</TabsTrigger>
-            <TabsTrigger value="trust"><Shield className="mr-1.5 h-3.5 w-3.5" />Trust & Certs</TabsTrigger>
-            <TabsTrigger value="booking"><MessageSquare className="mr-1.5 h-3.5 w-3.5" />Booking</TabsTrigger>
+        <Tabs value={tab} onValueChange={setTab} className="grid items-start gap-6 lg:grid-cols-[250px_1fr]">
+          <TabsList className="flex h-auto w-full flex-row gap-1 overflow-x-auto rounded-xl bg-muted/40 p-2 lg:flex-col lg:overflow-visible">
+            {websiteGuideSections.map((s) => {
+              const Icon = SECTION_ICONS[s.id] ?? Globe;
+              return (
+                <TabsTrigger
+                  key={s.id}
+                  value={s.id}
+                  className="w-full shrink-0 justify-start gap-2 rounded-lg px-3 py-2 text-left lg:shrink data-[state=active]:bg-card data-[state=active]:shadow-sm"
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium leading-tight">{s.label}</span>
+                    <span className="hidden text-[11px] font-normal leading-tight text-muted-foreground lg:block">
+                      {s.navHint}
+                    </span>
+                  </span>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
+
+          <div className="min-w-0 space-y-4">
+            {/* What am I editing? */}
+            <Card className="glass-card border-secondary/20">
+              <CardContent className="flex flex-wrap items-start justify-between gap-3 p-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{activeGuide.title}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{activeGuide.blurb}</p>
+                  <p className="mt-2 flex items-start gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <span>
+                      <span className="font-medium text-foreground">Where it appears:</span> {activeGuide.appears}
+                    </span>
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" className="shrink-0" onClick={() => setTourOpen(true)}>
+                  <HelpCircle className="mr-2 h-3.5 w-3.5" /> Show me how
+                </Button>
+              </CardContent>
+            </Card>
 
           {/* Templates */}
           <TabsContent value="templates" className="mt-4">
+
             <Card className="glass-card">
               <CardHeader className="border-b border-border/30">
                 <CardTitle className="text-base">Website Templates</CardTitle>
@@ -304,7 +354,7 @@ export default function WebsiteSettingsPage() {
               </CardHeader>
               <CardContent className="space-y-4 max-w-lg pt-6">
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Short Description</Label>
+                  <Label className="text-xs font-medium">Short description of your clinic</Label>
                   <Textarea
                     className="bg-muted/30 border-border/40 min-h-[60px]"
                     placeholder="A modern dental clinic dedicated to your smile..."
@@ -313,7 +363,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Title</Label>
+                  <Label className="text-xs font-medium">Main headline</Label>
                   <Input
                     className="bg-muted/30 border-border/40"
                     placeholder="Your Smile, Our Priority"
@@ -322,7 +372,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Subtitle</Label>
+                  <Label className="text-xs font-medium">Sub-headline</Label>
                   <Input
                     className="bg-muted/30 border-border/40"
                     placeholder="Professional dental care for the whole family"
@@ -331,7 +381,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-medium">Hero Background Image</Label>
+                  <Label className="text-xs font-medium">Background photo</Label>
                   <div className="flex items-center gap-4">
                     <div className="h-20 w-36 rounded-lg bg-muted/50 border border-border/40 flex items-center justify-center overflow-hidden">
                       {get("hero_image_url") ? (
@@ -351,7 +401,7 @@ export default function WebsiteSettingsPage() {
                   </div>
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Changes"}
+                  {updateClinic.isPending ? "Saving..." : "Save changes"}
                 </Button>
               </CardContent>
             </Card>
@@ -411,7 +461,7 @@ export default function WebsiteSettingsPage() {
                 )}
 
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Gallery"}
+                  {updateClinic.isPending ? "Saving..." : "Save gallery"}
                 </Button>
               </CardContent>
             </Card>
@@ -444,7 +494,7 @@ export default function WebsiteSettingsPage() {
                   </div>
                 ))}
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20 mt-4" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Hours"}
+                  {updateClinic.isPending ? "Saving..." : "Save hours"}
                 </Button>
               </CardContent>
             </Card>
@@ -486,7 +536,7 @@ export default function WebsiteSettingsPage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                    {updateClinic.isPending ? "Saving..." : "Save Colors"}
+                    {updateClinic.isPending ? "Saving..." : "Save colours"}
                   </Button>
                   <Button
                     variant="outline"
@@ -529,7 +579,7 @@ export default function WebsiteSettingsPage() {
                   <Input className="bg-muted/30 border-border/40" placeholder="https://g.page/yourclinic/review" value={get("google_review_url")} onChange={(e) => set("google_review_url", e.target.value)} />
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Social Links"}
+                  {updateClinic.isPending ? "Saving..." : "Save contact details"}
                 </Button>
               </CardContent>
             </Card>
@@ -564,7 +614,7 @@ export default function WebsiteSettingsPage() {
                   {certs.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No certifications added yet</p>}
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Certifications"}
+                  {updateClinic.isPending ? "Saving..." : "Save credentials"}
                 </Button>
               </CardContent>
             </Card>
@@ -597,7 +647,7 @@ export default function WebsiteSettingsPage() {
                   />
                 </div>
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Booking Settings"}
+                  {updateClinic.isPending ? "Saving..." : "Save booking messages"}
                 </Button>
               </CardContent>
             </Card>
@@ -617,20 +667,20 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Hero</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow badge</Label>
+                    <Label className="text-xs font-medium">Small badge above the headline</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Asaba's Premier Dental Clinic" value={get("hero_eyebrow")} onChange={(e) => set("hero_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Highlighted second line</Label>
+                    <Label className="text-xs font-medium">Second line (shown in your brand colour)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Personal Touch." value={get("hero_highlight")} onChange={(e) => set("hero_highlight", e.target.value)} />
                     <p className="text-[10px] text-muted-foreground">Shown under the hero title in your primary colour.</p>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Hero badge card title</Label>
+                    <Label className="text-xs font-medium">Small card on the photo — title</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Same-day appointments" value={get("hero_badge_title")} onChange={(e) => set("hero_badge_title", e.target.value)} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Hero badge card subtitle</Label>
+                    <Label className="text-xs font-medium">Small card on the photo — subtitle</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Call or book online and we'll fit you in." value={get("hero_badge_subtitle")} onChange={(e) => set("hero_badge_subtitle", e.target.value)} />
                   </div>
                 </div>
@@ -638,7 +688,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">About section</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="About us" value={get("about_eyebrow")} onChange={(e) => set("about_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -666,7 +716,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Services &amp; booking band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Our services" value={get("booking_eyebrow")} onChange={(e) => set("booking_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -683,7 +733,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Reviews band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Patient stories" value={get("reviews_eyebrow")} onChange={(e) => set("reviews_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -695,7 +745,7 @@ export default function WebsiteSettingsPage() {
                 <div className="space-y-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Visit band</p>
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Eyebrow</Label>
+                    <Label className="text-xs font-medium">Small label above the title (optional)</Label>
                     <Input className="bg-muted/30 border-border/40" placeholder="Location" value={get("visit_eyebrow")} onChange={(e) => set("visit_eyebrow", e.target.value)} />
                   </div>
                   <div className="space-y-2">
@@ -709,14 +759,17 @@ export default function WebsiteSettingsPage() {
                 </div>
 
                 <Button className="bg-secondary hover:bg-secondary/90 shadow-lg shadow-secondary/20" onClick={() => handleSave()} disabled={updateClinic.isPending}>
-                  {updateClinic.isPending ? "Saving..." : "Save Page Content"}
+                  {updateClinic.isPending ? "Saving..." : "Save page wording"}
                 </Button>
               </CardContent>
             </Card>
           </TabsContent>
+          </div>
         </Tabs>
 
+        <SectionTour section={activeGuide} open={tourOpen} onOpenChange={setTourOpen} />
       </motion.div>
+
     </div>
   );
 }
